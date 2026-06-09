@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+import { DateTime } from "luxon";
+import minimist from "minimist";
+
+const argv = minimist(process.argv.slice(2));
+const now = DateTime.now();
+const year = argv.y || now.year;
+const month = argv.m || now.month;
+
+function printCalender(year, month) {
+  const firstDate = DateTime.local(year, month, 1);
+  const lastDate = firstDate.endOf("month");
+
+  console.log(`     ${firstDate.toFormat("MMMM yyyy")}`);
+  console.log("Su Mo Tu We Th Fr Sa");
+  process.stdout.write("   ".repeat(firstDate.weekday % 7));
+
+  for (let date = firstDate; date <= lastDate; date = date.plus({ days: 1 })) {
+    process.stdout.write(String(date.day).padStart(2, " "));
+    date.weekday === 6 ? process.stdout.write("\n") : process.stdout.write(" ");
+  }
+
+  console.log("\n");
+}
+
+printCalender(year, month);
