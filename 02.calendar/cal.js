@@ -3,11 +3,6 @@
 import { DateTime } from "luxon";
 import minimist from "minimist";
 
-const argv = minimist(process.argv.slice(2));
-const now = DateTime.now();
-const year = argv.y ?? now.year;
-const month = argv.m ?? now.month;
-
 function printCalender(year, month) {
   const firstDate = DateTime.local(year, month, 1);
   const lastDate = firstDate.endOf("month");
@@ -26,5 +21,10 @@ function printCalender(year, month) {
   console.log();
   console.log();
 }
+
+const argv = minimist(process.argv.slice(2));
+const now = DateTime.now();
+const year = argv.y ?? now.year;
+const month = argv.m ?? now.month;
 
 printCalender(year, month);
