@@ -20,7 +20,7 @@ function printCalender(year, month) {
 
   for (let date = firstDate; date <= lastDate; date = date.plus({ days: 1 })) {
     process.stdout.write(String(date.day).padStart(2, " "));
-    date.weekday === 6 ? process.stdout.write("\n") : process.stdout.write(" ");
+    process.stdout.write(date.weekday === 6 ? "\n" : " ");
   }
 
   console.log();
