@@ -11,8 +11,10 @@ const month = argv.m || now.month;
 function printCalender(year, month) {
   const firstDate = DateTime.local(year, month, 1);
   const lastDate = firstDate.endOf("month");
+  const title = firstDate.toFormat("MMMM yyyy");
+  const padding = Math.floor((20 - title.length) / 2);
 
-  console.log(`     ${firstDate.toFormat("MMMM yyyy")}`);
+  console.log(" ".repeat(padding) + title);
   console.log("Su Mo Tu We Th Fr Sa");
   process.stdout.write("   ".repeat(firstDate.weekday % 7));
 
