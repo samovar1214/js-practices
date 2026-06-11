@@ -23,7 +23,8 @@ function printCalender(year, month) {
     date.weekday === 6 ? process.stdout.write("\n") : process.stdout.write(" ");
   }
 
-  console.log("\n");
+  console.log();
+  console.log();
 }
 
 printCalender(year, month);
