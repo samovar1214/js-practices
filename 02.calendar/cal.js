@@ -15,10 +15,11 @@ function printCalender(year, month) {
 
   for (let date = firstDate; date <= lastDate; date = date.plus({ days: 1 })) {
     process.stdout.write(String(date.day).padStart(2, " "));
-    process.stdout.write(date.weekday === 6 ? "\n" : " ");
+    process.stdout.write(
+      date.weekday === 6 || date.day === lastDate.day ? "\n" : " ",
+    );
   }
 
-  console.log();
   console.log();
 }
 
