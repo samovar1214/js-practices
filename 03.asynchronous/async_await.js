@@ -32,13 +32,21 @@ async function errorFlow(db) {
   try {
     await run(db, "INSERT INTO books (title) VALUES (?)", ["異邦人"]);
   } catch (err) {
-    console.error(err.message);
+    if (err.code === "SQLITE_CONSTRAINT") {
+      console.error(err.message);
+    } else {
+      throw err;
+    }
   }
 
   try {
     await get(db, "SELECT hoge FROM books");
   } catch (err) {
-    console.error(err.message);
+    if (err.code === "SQLITE_ERROR") {
+      console.error(err.message);
+    } else {
+      throw err;
+    }
   }
 
   await run(db, "DROP TABLE books");
