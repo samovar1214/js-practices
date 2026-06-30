@@ -28,19 +28,15 @@ function errorFlow(db) {
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     () => {
       db.run("INSERT INTO books (title) VALUES (?)", ["異邦人"], () => {
-        db.run(
-          "INSERT INTO books (title) VALUES (?)",
-          ["異邦人"],
-          function (err) {
+        db.run("INSERT INTO books (title) VALUES (?)", ["異邦人"], (err) => {
+          if (err) console.error(err.message);
+
+          db.get("SELECT hoge FROM books", (err) => {
             if (err) console.error(err.message);
 
-            db.get("SELECT hoge FROM books", (err) => {
-              if (err) console.error(err.message);
-
-              db.run("DROP TABLE books");
-            });
-          },
-        );
+            db.run("DROP TABLE books");
+          });
+        });
       });
     },
   );
