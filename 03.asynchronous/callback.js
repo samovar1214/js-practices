@@ -15,7 +15,7 @@ function normalFlow(db) {
           (_err, row) => {
             console.log(row);
 
-            db.run("DROP TABLE books", () => {});
+            db.run("DROP TABLE books");
           },
         );
       });
@@ -37,7 +37,7 @@ function errorFlow(db) {
             db.get("SELECT hoge FROM books", (err) => {
               if (err) console.error(err.message);
 
-              db.run("DROP TABLE books", () => {});
+              db.run("DROP TABLE books");
             });
           },
         );
