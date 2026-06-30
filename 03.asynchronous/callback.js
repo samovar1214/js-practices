@@ -12,7 +12,7 @@ function normalFlow(db) {
         db.get(
           "SELECT * FROM books WHERE id = ?",
           [this.lastID],
-          (err, row) => {
+          (_err, row) => {
             console.log(row);
 
             db.run("DROP TABLE books", () => {});
