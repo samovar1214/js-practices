@@ -29,10 +29,14 @@ function errorFlow(db) {
     () => {
       db.run("INSERT INTO books (title) VALUES (?)", ["異邦人"], () => {
         db.run("INSERT INTO books (title) VALUES (?)", ["異邦人"], (err) => {
-          if (err) console.error(err.message);
+          if (err) {
+            console.error(err.message);
+          }
 
           db.get("SELECT hoge FROM books", (err) => {
-            if (err) console.error(err.message);
+            if (err) {
+              console.error(err.message);
+            }
 
             db.run("DROP TABLE books");
           });
