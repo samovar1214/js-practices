@@ -45,10 +45,13 @@ export default class ConsoleView {
 
     fs.writeFileSync(tmpFilePath, content, "utf-8");
     const editor = process.env.EDITOR || "vi";
-    spawnSync(editor, [tmpFilePath], { stdio: "inherit" });
-    const updatedContent = fs.readFileSync(tmpFilePath, "utf-8");
-    fs.unlinkSync(tmpFilePath);
 
-    return updatedContent;
+    try {
+      spawnSync(editor, [tmpFilePath], { stdio: "inherit" });
+      const updatedContent = fs.readFileSync(tmpFilePath, "utf-8");
+      return updatedContent;
+    } finally {
+      fs.unlinkSync(tmpFilePath);
+    }
   }
 }
