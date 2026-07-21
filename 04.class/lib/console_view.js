@@ -16,11 +16,6 @@ export default class ConsoleView {
   }
 
   async promptSelect(memos, message) {
-    if (memos.length === 0) {
-      this.showMessage("メモがありません。");
-      return null;
-    }
-
     const choices = memos.map((memo) => ({
       name: memo.id.toString(),
       message: memo.firstLine,

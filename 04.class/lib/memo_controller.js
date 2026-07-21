@@ -44,68 +44,66 @@ export default class MemoController {
     await this.#database.insert(memo);
   }
 
-  async #list() {
+  async #fetchMemos() {
     const memos = await this.#database.getAll();
 
     if (memos.length === 0) {
       this.#view.showMessage("メモがありません。");
-      return;
+      return null;
     }
+
+    return memos;
+  }
+
+  async #list() {
+    const memos = await this.#fetchMemos();
+    if (!memos) return;
 
     memos.forEach((memo) => {
       this.#view.showMessage(memo.firstLine);
     });
   }
 
-  async #read() {
-    const memos = await this.#database.getAll();
+  async #executeWithSelectedMemo(message, actionCallback) {
+    const memos = await this.#fetchMemos();
+    if (!memos) return;
 
-    const selectedMemo = await this.#view.promptSelect(
-      memos,
-      "表示したいメモを選択してください：",
-    );
+    const selectedMemo = await this.#view.promptSelect(memos, message);
 
     if (!selectedMemo) {
       return;
     }
 
-    this.#view.showMessage(`\n${selectedMemo.content}`);
+    await actionCallback(selectedMemo);
+  }
+
+  async #read() {
+    await this.#executeWithSelectedMemo(
+      "表示したいメモを選択してください：",
+      (memo) => {
+        this.#view.showMessage(`\n${memo.content}`);
+      },
+    );
   }
 
   async #delete() {
-    const memos = await this.#database.getAll();
-
-    const selectedMemo = await this.#view.promptSelect(
-      memos,
+    await this.#executeWithSelectedMemo(
       "削除したいメモを選択してください：",
+      async (memo) => await this.#database.delete(memo),
     );
-
-    if (!selectedMemo) {
-      return;
-    }
-
-    await this.#database.delete(selectedMemo);
   }
 
   async #edit() {
-    const memos = await this.#database.getAll();
-
-    const selectedMemo = await this.#view.promptSelect(
-      memos,
+    await this.#executeWithSelectedMemo(
       "編集したいメモを選択してください：",
+      async (memo) => {
+        const updatedContent = this.#view.editInExternalEditor(
+          memo.id,
+          memo.content,
+        );
+        memo.content = updatedContent;
+        await this.#database.update(memo);
+      },
     );
-
-    if (!selectedMemo) {
-      return;
-    }
-
-    const updatedContent = this.#view.editInExternalEditor(
-      selectedMemo.id,
-      selectedMemo.content,
-    );
-
-    selectedMemo.content = updatedContent;
-
-    await this.#database.update(selectedMemo);
   }
 }
