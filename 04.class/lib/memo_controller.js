@@ -36,7 +36,7 @@ export default class MemoController {
   async #create() {
     const content = this.#view.readStandardInput();
 
-    if (content.trim() === "") {
+    if (content === "") {
       return;
     }
 

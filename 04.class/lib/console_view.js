@@ -8,7 +8,7 @@ const { Select } = pkg;
 
 export default class ConsoleView {
   readStandardInput() {
-    return fs.readFileSync(0, "utf-8");
+    return fs.readFileSync(0, "utf-8").trim();
   }
 
   showMessage(message) {
